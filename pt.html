@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>经文查询</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+          crossorigin="anonymous">
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" i
+        ntegrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" 
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" 
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" 
+        crossorigin="anonymous"></script>
+    
+    
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- import the webpage's javascript file -->
+    <script src="./dist/main.bundle.js"></script>
+  </head>  
+  <body>
+    <div class="container">
+  <h1>经文查询</h1>
+
+  <form id="target" method="POST">
+    <div class="form-group">
+      <label for="exampleInputEmail1">
+	支持两类查询：
+	<ol><li>书名 及章节，书名后需要一个空格，多节用逗号(只接受英文模式字符)分隔，
+	    可输入多行，查询多个章节，比如<br>
+
+<pre><code>	诗 95:1-3,5-10
+	出 25:31-40</code></pre>
+	  <li>     或者每一行输入daily读经计划， 例如：<br>
+<pre><code>     星期一 創世紀第13章 以賽亞書第32章
+     星期二 創世紀第14章 以賽亞書第31章第1节</code></pre>
+	  </li>
+      </ol></label>
+      <textarea rows="8" name="book" class="form-control" id="book" aria-describedby="emailHelp" placeholder="诗 95:1-3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+</div>
+<div class="container" id="result">
+
+  <div id="day0"></div>
+  <div id="day1"></div>
+  <div id="day2"></div>
+  <div id="day3"></div>
+  <div id="day4"></div>
+<div id="day5"></div>
+<div id="day6"></div>
+<div id="day7"></div>
+<div id="day8"></div>
+  
+</div>
+
+    <!-- include the Glitch button to show what the webpage is about and
+          to make it easier for folks to view source and remix -->
+
+    
+<script>
+  $("#target").submit(function( event ) {
+      event.preventDefault();
+
+      for (var i=0; i<8; i++) {
+	  jQuery('#day'+i).empty();
+      }
+
+      var book = $("textarea[name=book]").val();
+      //console.log("processing event ", book);
+      if (book.indexOf('星期') >= 0) {
+	  bquery.processDailyTaskQuery(book);
+      } else {
+	  //console.log("processing event query ");
+	  bquery.processQuery(book);
+      }
+});
+    </script>
+  </body>
+</html>

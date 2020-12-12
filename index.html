@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Share YouTube Videos</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+  crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" 
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" 
+  crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="yt-style.css">
+ <script type="text/javascript"  src="dist/yt.bundle.js"></script>
+ </head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#"><img src="logo-3.png" width="160px"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="#">Channel <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="cast.html">Cast</a>
+          </div>
+        </div>
+      </nav>
+      <div class="container-fluid" id="paste-bin">
+
+          <div class="row">
+            <div class="col-10">
+                <h2>Share YouTube Videos Instantly</h2>
+              <form id="target" method="POST">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">
+               Enter YouTube video links or IDs one in a line   </li>
+                    </ol></label>
+                    <textarea rows="8" cols="50" name="book" class="form-control" id="book" 
+                    aria-describedby="emailHelp" placeholder="put youtube url here"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Share</button>
+                </form>
+        
+                <div id="share-title"></div>
+                <div><canvas id="qrimg"></canvas></div>
+              </div>
+          </div>
+        </div>
+
+
+<div class="container-fluid" width="800px">
+<div class="row">
+
+  <div class="col-md-8 col-xs-12">
+   
+<div class="container yt-container">
+<div id="player" class="yt-video"></div>
+</div>
+</div>
+  
+  <div class="col-md-4 col-xs-8">
+<div id="snippet" class="d-flex flex-column">
+</div>
+</div>
+</div>
+
+</div>
+
+
+   <script>
+   document.addEventListener("message", function(event) {
+    console.log("Received post message", event);
+
+    logMessage(event.data);
+}, false);
+
+function logMessage(message) {
+    log.append((new Date()) + " " + message + "\n");
+}
+var player;
+
+function initYT() {
+  console.log(gapi.client);
+  //gapi.client.setApiKey("");
+   }
+
+   function playVideo(event) {
+     console.log(event);
+     // event.preventDefault();
+     // var n = event.target;
+     window.ytmgr.playVideo(event);
+   }
+function onYouTubeIframeAPIReady() {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const myParam = urlParams.get('v');
+    if (myParam) {
+        
+        window.ytmgr = new ytlink.YTManager({videos: myParam,
+   divid: 'player'});
+   $('#paste-bin').hide();
+    }
+}
+var tag = document.createElement('script');
+
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+
+function onPlayerReady(event) {
+        event.target.playVideo();
+}
+function onPlayerStateChange(event) {
+  console.log(event.data);
+  if (event.data == YT.PlayerState.PLAYING) {
+     window.postMessage("play", "*");
+  } else {
+    window.postMessage("play", "*");
+    window.ReactNativeWebView.postMessage(event.data);
+  }
+}
+
+function stopVideo() {
+     player.stopVideo();
+  }
+
+ </script>
+<!--script src="https://apis.google.com/js/api.js?onload=initYT"></script-->
+
+
+
+        <script>
+        $("#target").submit(function( event ) {
+      event.preventDefault();
+      var book = $("textarea[name=book]").val();
+      var canvas = document.getElementById('qrimg');
+      ytlink.getQRForVideos(book.split('\n'), canvas, '#share-title');
+      
+});
+        </script>
+   </body>
+     </html>
