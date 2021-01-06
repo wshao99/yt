@@ -19,7 +19,7 @@ function draw() {
 function callback(body) {
   // console.log("test", body)
   
-  background(0, 20);
+  background(0);
   
   
   // Draw a circle at the location of each joint
